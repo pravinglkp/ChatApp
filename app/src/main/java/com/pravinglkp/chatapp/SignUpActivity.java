@@ -37,7 +37,7 @@ public class SignUpActivity extends AppCompatActivity {
     private CircleImageView imageView;
     private TextInputEditText editTextEmailSignUp,editTextPasswordSignup,editTextUsernameSignup;
     private Button buttonRegister;
-    boolean imageControl=false;
+
 
     FirebaseAuth auth;
 
@@ -47,6 +47,7 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     Uri imageUri;
+    boolean imageControl=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 imageChooser();
             }
         });
@@ -94,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
     public void imageChooser(){
         Intent intent = new Intent();
-        intent.setType("images/*");
+        intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,1);
 
@@ -117,7 +119,7 @@ public class SignUpActivity extends AppCompatActivity {
     public void signUp(String email,String password,String username){
         auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull @org.jetbrains.annotations.NotNull Task<AuthResult> task) {
+            public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     reference.child("Users").child(auth.getUid()).child("userName").setValue(username);
                     if(imageControl){
@@ -152,7 +154,6 @@ public class SignUpActivity extends AppCompatActivity {
                     }
 
                     Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
-                    intent.putExtra("UserName",username);
                     startActivity(intent);
                     finish();
                 }

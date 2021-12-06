@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "989671309667",
+    "project_id": "chatapp-fbc5e",
+    "storage_bucket": "chatapp-fbc5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989671309667:android:f4b6cbaf8cbc590c8e5356",
+        "android_client_info": {
+          "package_name": "com.pravinglkp.chatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "989671309667-p533cbaugf46ic08ma3dm5750p0t12mr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgF6UoUpxr9A6l-ShEB-LpbRJvQqaMlWY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989671309667-p533cbaugf46ic08ma3dm5750p0t12mr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

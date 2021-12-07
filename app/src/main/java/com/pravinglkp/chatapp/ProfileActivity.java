@@ -39,7 +39,6 @@ public class ProfileActivity extends AppCompatActivity {
     private Button buttonUpdate;
     String image;
 
-
     FirebaseDatabase database;
     DatabaseReference reference;
     FirebaseAuth auth;
@@ -89,8 +88,8 @@ public class ProfileActivity extends AppCompatActivity {
         reference.child("Users").child(firebaseUser.getUid()).child("userName").setValue(userName);
         if(imageControl){
             UUID randomId=UUID.randomUUID();
-            String imageName="images/"+randomId+".jpg";
-            storageReference.child("imageName").putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            final String imageName="images/"+randomId+".jpg";
+            storageReference.child(imageName).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     StorageReference myStorageRef=firebaseStorage.getReference(imageName);

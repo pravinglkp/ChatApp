@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -71,7 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 imageChooser();
             }
         });
@@ -99,14 +99,12 @@ public class SignUpActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent,1);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1 && resultCode==RESULT_OK && data!=null){
-
             imageUri=data.getData();
             Picasso.get().load(imageUri).into(imageView);
             imageControl=true;
@@ -121,35 +119,51 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    Log.d("m","SignUp Success");
                     reference.child("Users").child(auth.getUid()).child("userName").setValue(username);
                     if(imageControl){
+                        Log.d("m","Image Avaialble");
                         UUID randomId=UUID.randomUUID();
-                        String imageName="images/"+randomId+".jpg";
-                        storageReference.child("imageName").putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        final String imageName="images/"+randomId+".jpg";
+                        storageReference.child(imageName).putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.d("m","Image Uploaded to Storage");
                                 StorageReference myStorageRef=firebaseStorage.getReference(imageName);
                                 myStorageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
+                                        Log.d("m","URI Fetched");
+                                        Toast.makeText(SignUpActivity.this,"Write to storage is successfull",Toast.LENGTH_SHORT).show();
                                         String filePath=uri.toString();
-                                        reference.child("Users").child(auth.getUid()).child("image").setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        reference.child("Users").child(auth.getUid()).child("image")
+                                                .setValue(filePath).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
+                                                Log.d("m","URI Connected to DB");
                                                 Toast.makeText(SignUpActivity.this,"Write to database is successfull",Toast.LENGTH_SHORT).show();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
+                                           // Log.d("m","URI not Connected to DB");
                                             @Override
                                             public void onFailure(@NonNull @NotNull Exception e) {
                                                 Toast.makeText(SignUpActivity.this,"Write to database is not successfull",Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    //Log.d("m","URI not Fetched");
+                                    @Override
+                                    public void onFailure(@NonNull @NotNull Exception e) {
+                                        Toast.makeText(SignUpActivity.this,"Write storage is not successfull",Toast.LENGTH_SHORT).show();
+
+                                    }
                                 });
                             }
                         });
                     }
                     else{
+                        Log.d("m","Image Not Avaialble");
                         reference.child("Users").child(auth.getUid()).child("image").setValue("null");
                     }
 
@@ -165,3 +179,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 }
+
+
+
+
+
+
+
+
+

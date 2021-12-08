@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email=editTextEmail.getText().toString();
                 String password=editTextPassword.getText().toString();
 
-                if(email!="" && password!=""){
+                if(!email.equals("") && !password.equals("")){
                     signIn(email,password);
                 }
                 else{
